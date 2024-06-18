@@ -12,7 +12,6 @@ import (
 // 接受到任意消息就回复二维码
 func P2MessageReceive(ctx context.Context, event *larkim.P2MessageReceiveV1) error {
 	if event.Event.Message.ThreadId != nil {
-
 		if *event.Event.Message.ThreadId == config.Get().Qrcode.ThreadId {
 			img, err := qrcode.GetQrcodeFile()
 			if err != nil {
@@ -22,7 +21,7 @@ func P2MessageReceive(ctx context.Context, event *larkim.P2MessageReceiveV1) err
 			if err != nil {
 				return err
 			}
-			return client.Get().Im_Message_Reply("om_b0d3002db89790f29b1c2f96fd7881fe", client.Im_Message_Reply_Request{
+			return client.Get().Im_Message_Reply(*event.Event.Message.MessageId, client.Im_Message_Reply_Request{
 				Content: `{
 			"image_key": "` + imageKey + `"
 		}`,

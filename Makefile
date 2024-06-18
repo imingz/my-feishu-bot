@@ -11,7 +11,7 @@ run: build
 	./$(OUTPUT_DIR)/$(TARGET) --env=dev
 
 .PHONY: realse
-realse: build
+realse: kill build
 	mkdir -p $(LOG_DIR)
 	nohup ./$(OUTPUT_DIR)/$(TARGET) --env=pro > $(LOG_DIR)/$(TARGET).log 2>&1 &
 
