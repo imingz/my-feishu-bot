@@ -3,9 +3,11 @@
         "larkcore",
         "larkim",
         "larksuite",
+        "larkws",
         "oapi",
         "qrcode",
         "qrcodeclient",
+        "wsclient",
         "xiaoxiaojiqiren"
     ]
 }

@@ -9,7 +9,7 @@ import (
 	"github.com/skip2/go-qrcode"
 )
 
-func getQrcodeFile() (io.Reader, error) {
+func GetQrcodeFile() (io.Reader, error) {
 	gotQrcode, err := qrcodeclient.GetQrcode(context.Background())
 	if err != nil {
 		return nil, err

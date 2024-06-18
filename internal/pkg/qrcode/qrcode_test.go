@@ -6,7 +6,7 @@ import (
 )
 
 func TestQrcode(t *testing.T) {
-	img, err := getQrcodeFile()
+	img, err := GetQrcodeFile()
 	if err != nil {
 		t.Errorf("error = %v", err)
 	}
