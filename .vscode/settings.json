@@ -1,5 +1,6 @@
 {
     "cSpell.words": [
+        "httpclient",
         "httpserverext",
         "larkcard",
         "larkcore",
@@ -12,6 +13,7 @@
         "Pywh",
         "qrcode",
         "qrcodeclient",
+        "sdkginext",
         "Vkhxf",
         "Vvjyg",
         "wsclient",

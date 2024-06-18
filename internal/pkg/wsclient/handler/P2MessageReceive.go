@@ -11,7 +11,8 @@ import (
 // 接受到任意消息就回复二维码
 func P2MessageReceive(ctx context.Context, event *larkim.P2MessageReceiveV1) error {
 	if event.Event.Message.ThreadId != nil {
-		if *event.Event.Message.ThreadId == config.Get().Qrcode.ThreadId {
+		switch *event.Event.Message.ThreadId {
+		case config.Get().Qrcode.ThreadId:
 			return biz.SendQrcodeCard(*event.Event.Message.MessageId)
 		}
 	}

@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"io"
-	"xiaoxiaojiqiren/internal/pkg/qrcodeclient"
+	"xiaoxiaojiqiren/internal/pkg/qrcode/qrcodeclient"
 
 	"github.com/skip2/go-qrcode"
 )
