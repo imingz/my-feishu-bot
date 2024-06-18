@@ -1,7 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"xiaoxiaojiqiren/internal/pkg/config"
+)
 
 func main() {
-	fmt.Println("Hello")
+	fmt.Printf("config.Get(): %#v\n", config.Get())
 }
