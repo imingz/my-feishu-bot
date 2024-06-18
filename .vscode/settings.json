@@ -4,6 +4,8 @@
         "larkim",
         "larksuite",
         "oapi",
+        "qrcode",
+        "qrcodeclient",
         "xiaoxiaojiqiren"
     ]
 }
