@@ -2,9 +2,8 @@ package handler
 
 import (
 	"context"
-	"xiaoxiaojiqiren/internal/pkg/client"
+	"xiaoxiaojiqiren/internal/pkg/biz"
 	"xiaoxiaojiqiren/internal/pkg/config"
-	"xiaoxiaojiqiren/internal/pkg/qrcode"
 
 	larkim "github.com/larksuite/oapi-sdk-go/v3/service/im/v1"
 )
@@ -13,22 +12,7 @@ import (
 func P2MessageReceive(ctx context.Context, event *larkim.P2MessageReceiveV1) error {
 	if event.Event.Message.ThreadId != nil {
 		if *event.Event.Message.ThreadId == config.Get().Qrcode.ThreadId {
-			img, err := qrcode.GetQrcodeFile()
-			if err != nil {
-				return err
-			}
-			imageKey, err := client.Get().Im_Image_Upload(client.ImageType_Message, img)
-			if err != nil {
-				return err
-			}
-			return client.Get().Im_Message_Reply(*event.Event.Message.MessageId, client.Im_Message_Reply_Request{
-				Content: `{
-			"image_key": "` + imageKey + `"
-		}`,
-				MsgType:       "image",
-				ReplyInThread: true,
-				Uuid:          "",
-			})
+			return biz.SendQrcodeCard(*event.Event.Message.MessageId)
 		}
 	}
 	return nil

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	larkcore "github.com/larksuite/oapi-sdk-go/v3/core"
 	larkim "github.com/larksuite/oapi-sdk-go/v3/service/im/v1"
 )
 
@@ -26,16 +27,20 @@ func (c *Client) Im_Message_Reply(message_id string, request Im_Message_Reply_Re
 		Build()
 
 	// 发起请求
-	resp, err := c.client.Im.Message.Reply(context.Background(), req)
+	resp, err := c.Client.Im.Message.Reply(context.Background(), req)
 
 	// 处理错误
 	if err != nil {
 		return err
 	}
 
+	fmt.Println("Im_Message_Reply")
+
 	// 服务端错误处理
 	if !resp.Success() {
 		return fmt.Errorf("client.Im.Message.Reply failed, code: %d, msg: %s, log_id: %s", resp.Code, resp.Msg, resp.RequestId())
 	}
+
+	fmt.Println(larkcore.Prettify(resp))
 	return nil
 }

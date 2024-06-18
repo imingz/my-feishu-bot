@@ -9,7 +9,7 @@ import (
 )
 
 type Client struct {
-	client *lark.Client
+	*lark.Client
 }
 
 var instance *Client
@@ -18,7 +18,7 @@ var once sync.Once
 func Get() *Client {
 	once.Do(func() {
 		instance = &Client{
-			client: lark.NewClient(config.Get().APP.ID, config.Get().APP.Secret, lark.WithLogLevel(larkcore.LogLevelDebug)),
+			Client: lark.NewClient(config.Get().APP.ID, config.Get().APP.Secret, lark.WithLogLevel(larkcore.LogLevelDebug)),
 		}
 	})
 

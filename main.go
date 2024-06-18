@@ -2,39 +2,35 @@ package main
 
 import (
 	"context"
+	"net/http"
+	"xiaoxiaojiqiren/internal/pkg/biz"
+	"xiaoxiaojiqiren/internal/pkg/config"
 	"xiaoxiaojiqiren/internal/pkg/wsclient"
 
-	"github.com/gin-gonic/gin"
+	larkcard "github.com/larksuite/oapi-sdk-go/v3/card"
+	larkcore "github.com/larksuite/oapi-sdk-go/v3/core"
+	"github.com/larksuite/oapi-sdk-go/v3/core/httpserverext"
+	larkevent "github.com/larksuite/oapi-sdk-go/v3/event"
 )
 
 func main() {
 	go func() {
-		r := gin.Default()
-		r.GET("/", func(c *gin.Context) {
-			c.JSON(200, gin.H{
-				"username": "name1",
-				"data":     "data1",
-			})
+		// 创建 card 处理器
+		cardHandler := larkcard.NewCardActionHandler(config.Get().APP.VerificationToken, config.Get().APP.EventEncryptKey, func(ctx context.Context, cardAction *larkcard.CardAction) (any, error) {
+			if cardAction.Action.Value["qrcode"] == "refresh" {
+				biz.SendQrcodeCard(cardAction.OpenMessageID)
+			}
+			return nil, nil
 		})
 
-		r.POST("/card", func(c *gin.Context) {
-			var event struct {
-				Challenge string `json:"challenge"`
-				Type      string `json:"type"`
-				Token     string `json:"token"`
-			}
-			if err := c.ShouldBindJSON(&event); err != nil {
-				c.JSON(400, gin.H{
-					"error": err.Error(),
-				})
-				return
-			}
-			c.JSON(200, gin.H{
-				"challenge": event.Challenge,
-			})
-		})
+		// 注册处理器
+		http.HandleFunc("/card", httpserverext.NewCardActionHandlerFunc(cardHandler, larkevent.WithLogLevel(larkcore.LogLevelDebug)))
 
-		r.Run()
+		// 启动http服务
+		err := http.ListenAndServe(":8080", nil)
+		if err != nil {
+			panic(err)
+		}
 	}()
 
 	err := wsclient.Get().Start(context.Background())

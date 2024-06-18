@@ -25,7 +25,7 @@ func (c *Client) Im_Image_Upload(imageType ImageType, image io.Reader) (string, 
 		Build()
 
 	// 发起请求
-	resp, err := c.client.Im.Image.Create(context.Background(), req)
+	resp, err := c.Client.Im.Image.Create(context.Background(), req)
 
 	// 处理错误
 	if err != nil {

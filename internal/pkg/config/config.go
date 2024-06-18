@@ -14,8 +14,10 @@ type Config struct {
 }
 
 type AppConfig struct {
-	ID     string `yaml:"ID"`
-	Secret string `yaml:"Secret"`
+	ID                string `yaml:"ID"`
+	Secret            string `yaml:"Secret"`
+	VerificationToken string `yaml:"VerificationToken"`
+	EventEncryptKey   string `yaml:"EventEncryptKey"`
 }
 
 type QrcodeConfig struct {
