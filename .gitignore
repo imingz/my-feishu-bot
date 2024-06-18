@@ -1,4 +1,6 @@
 configs/
+output/
+.log/
 
 # Created by https://www.toptal.com/developers/gitignore/api/linux,go,visualstudiocode,go
 # Edit at https://www.toptal.com/developers/gitignore?templates=linux,go,visualstudiocode,go
