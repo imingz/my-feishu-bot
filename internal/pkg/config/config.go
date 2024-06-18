@@ -9,12 +9,18 @@ import (
 var config = new(Config)
 
 type Config struct {
-	APP AppConfig `yaml:"App"`
+	APP    AppConfig    `yaml:"App"`
+	Qrcode QrcodeConfig `yaml:"qrcode"`
 }
 
 type AppConfig struct {
 	ID     string `yaml:"ID"`
 	Secret string `yaml:"Secret"`
+}
+
+type QrcodeConfig struct {
+	OpenId  string `yaml:"openId"`
+	BaseUrl string `yaml:"baseUrl"`
 }
 
 func init() {
