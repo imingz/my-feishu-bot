@@ -19,8 +19,9 @@ type AppConfig struct {
 }
 
 type QrcodeConfig struct {
-	OpenId  string `yaml:"openId"`
-	BaseUrl string `yaml:"baseUrl"`
+	OpenId   string `yaml:"openId"`
+	BaseUrl  string `yaml:"baseUrl"`
+	ThreadId string `yaml:"threadId"`
 }
 
 func init() {
