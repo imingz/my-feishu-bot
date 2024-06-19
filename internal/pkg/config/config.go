@@ -1,6 +1,8 @@
 package config
 
 import (
+	"path"
+	"runtime"
 	"xiaoxiaojiqiren/internal/pkg/env"
 
 	"github.com/spf13/viper"
@@ -9,8 +11,9 @@ import (
 var config = new(Config)
 
 type Config struct {
-	APP    AppConfig    `yaml:"App"`
-	Qrcode QrcodeConfig `yaml:"qrcode"`
+	APP         AppConfig         `yaml:"App"`
+	Qrcode      QrcodeConfig      `yaml:"qrcode"`
+	RoomBalance RoomBalanceConfig `yaml:"roomBalance"`
 }
 
 type AppConfig struct {
@@ -21,17 +24,23 @@ type AppConfig struct {
 }
 
 type QrcodeConfig struct {
-	OpenId   string `yaml:"openId"`
-	BaseUrl  string `yaml:"baseUrl"`
-	ChatId   string `yaml:"chatId"`
-	ThreadId string `yaml:"threadId"`
+	OpenId  string `yaml:"openId"`  // 慧湖通的 openId
+	BaseUrl string `yaml:"baseUrl"` // 慧湖通的 BaseUrl
+	ChatId  string `yaml:"chatId"`  // 监听的群聊 chatId
+}
+
+type RoomBalanceConfig struct {
+	OpenId string `yaml:"openId"` // 接受消息的人的 openId
 }
 
 func init() {
-	viper.SetConfigName(env.Active) // 配置文件名称(无扩展名)
-	viper.SetConfigType("yaml")     // 如果配置文件的名称中没有扩展名，则需要配置此项
-	viper.AddConfigPath(".")        // 还可以在工作目录中查找配置
-	viper.AddConfigPath("./configs")
+	viper.SetConfigName(env.Active)                        // 配置文件名称(无扩展名)
+	viper.SetConfigType("yaml")                            // 如果配置文件的名称中没有扩展名，则需要配置此项
+	_, filename, _, _ := runtime.Caller(0)                 // 获取当前文件（config.go）路径
+	confPath := path.Join(path.Dir(filename), "./configs") // 获取当前文件目录
+	viper.AddConfigPath(confPath)                          // 添加配置文件路径
+	viper.AddConfigPath(".")                               // 还可以在工作目录中查找配置
+	viper.AddConfigPath("./configs")                       // 还可以在工作目录的 configs 目录中查找配置
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			// 配置文件未找到错误；如果需要可以忽略
