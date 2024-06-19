@@ -1,13 +1,11 @@
 package main
 
 import (
-	"context"
 	"log/slog"
 	"os"
+	"xiaoxiaojiqiren/internal/bot"
 	"xiaoxiaojiqiren/internal/pkg/env"
-	"xiaoxiaojiqiren/internal/pkg/httpclient"
 	"xiaoxiaojiqiren/internal/pkg/slogor"
-	"xiaoxiaojiqiren/internal/pkg/wsclient"
 )
 
 func main() {
@@ -18,13 +16,6 @@ func main() {
 		NoColor:    env.Active == env.PRO,
 	})))
 
-	// 启动http服务
-	go func() {
-		httpclient.Get().Run()
-	}()
-
-	err := wsclient.Get().Start(context.Background())
-	if err != nil {
-		panic(err)
-	}
+	bot := bot.NewBot()
+	bot.Run()
 }
