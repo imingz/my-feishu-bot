@@ -25,7 +25,6 @@ type QrcodeConfig struct {
 	BaseUrl  string `yaml:"baseUrl"`
 	ChatId   string `yaml:"chatId"`
 	ThreadId string `yaml:"threadId"`
-	CardId   string `yaml:"cardId"`
 }
 
 func init() {
