@@ -1,19 +1,17 @@
-package hhtclient
+package reqclient
 
 import (
 	"context"
 	"errors"
-	"log/slog"
 )
 
-func GetRoomBalance(ctx context.Context) (float64, error) {
+func (c *Client) GetRoomBalance(ctx context.Context) (float64, error) {
 	var resp getRoomBalanceResponse
-	err := client.Get("/proxy/qy/sdcz/getRoomBalance?apartmentId=7&roomId=2290").
+	err := c.Client.Get("/proxy/qy/sdcz/getRoomBalance?apartmentId=7&roomId=2290").
 		Do(ctx).
 		Into(&resp)
 
 	if err != nil {
-		slog.Debug("GetRoomBalance", "err", err)
 		return 0, err
 	}
 

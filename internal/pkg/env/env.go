@@ -16,7 +16,6 @@ func init() {
 
 	switch Active {
 	case DEV:
-		slog.SetLogLoggerLevel(slog.LevelDebug)
 	case PRO:
 	default:
 		slog.Warn("未知的 env, 使用默认值 dev")

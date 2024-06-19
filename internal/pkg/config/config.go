@@ -10,30 +10,7 @@ import (
 
 var config = new(Config)
 
-type Config struct {
-	APP         AppConfig         `yaml:"App"`
-	Qrcode      QrcodeConfig      `yaml:"qrcode"`
-	RoomBalance RoomBalanceConfig `yaml:"roomBalance"`
-}
-
-type AppConfig struct {
-	ID                string `yaml:"ID"`
-	Secret            string `yaml:"Secret"`
-	VerificationToken string `yaml:"VerificationToken"`
-	EventEncryptKey   string `yaml:"EventEncryptKey"`
-}
-
-type QrcodeConfig struct {
-	OpenId  string `yaml:"openId"`  // 慧湖通的 openId
-	BaseUrl string `yaml:"baseUrl"` // 慧湖通的 BaseUrl
-	ChatId  string `yaml:"chatId"`  // 监听的群聊 chatId
-}
-
-type RoomBalanceConfig struct {
-	OpenId string `yaml:"openId"` // 接受消息的人的 openId
-}
-
-func init() {
+func NewConfig() *Config {
 	viper.SetConfigName(env.Active)                        // 配置文件名称(无扩展名)
 	viper.SetConfigType("yaml")                            // 如果配置文件的名称中没有扩展名，则需要配置此项
 	_, filename, _, _ := runtime.Caller(0)                 // 获取当前文件（config.go）路径
@@ -53,8 +30,9 @@ func init() {
 	if err := viper.Unmarshal(config); err != nil {
 		panic("配置文件解析错误" + err.Error())
 	}
+	return config
 }
 
-func Get() Config {
-	return *config
+func Get() *Config {
+	return config
 }

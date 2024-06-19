@@ -2,28 +2,32 @@ package bot
 
 import (
 	"context"
-	"encoding/json"
 	"log/slog"
 	"xiaoxiaojiqiren/internal/pkg/config"
-	"xiaoxiaojiqiren/internal/pkg/consts"
 	"xiaoxiaojiqiren/internal/pkg/env"
 	"xiaoxiaojiqiren/internal/pkg/handler"
+	reqclient "xiaoxiaojiqiren/internal/pkg/req_client"
 
 	"github.com/gin-gonic/gin"
 	sdkginext "github.com/larksuite/oapi-sdk-gin"
 	larkcard "github.com/larksuite/oapi-sdk-go/v3/card"
 	larkcore "github.com/larksuite/oapi-sdk-go/v3/core"
 	"github.com/larksuite/oapi-sdk-go/v3/event/dispatcher"
-	larkim "github.com/larksuite/oapi-sdk-go/v3/service/im/v1"
 	larkws "github.com/larksuite/oapi-sdk-go/v3/ws"
 )
 
 type Bot struct {
-	WsClient   *larkws.Client
-	HttpClient *gin.Engine
+	Config     *config.Config    // 配置
+	WsClient   *larkws.Client    // 事件订阅客户端
+	HttpClient *gin.Engine       // HTTP 服务
+	ReqClient  *reqclient.Client // 慧湖通相关的请求客户端
 }
 
 func NewBot() *Bot {
+	// 初始化配置
+	config := config.NewConfig()
+
+	// 初始化 HTTP 服务
 	httpClient := gin.Default()
 	httpClient.POST("/webhook/card", sdkginext.NewCardActionHandlerFunc(cardHandler))
 
@@ -34,18 +38,24 @@ func NewBot() *Bot {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
+	// 初始化 WebSocket 客户端
 	var wsClient *larkws.Client
 	wsHandler := dispatcher.NewEventDispatcher("", "").
 		OnP2MessageReceiveV1(P2MessageReceive)
 
-	wsClient = larkws.NewClient(config.Get().APP.ID, config.Get().APP.Secret,
+	wsClient = larkws.NewClient(config.APP.ID, config.APP.Secret,
 		larkws.WithEventHandler(wsHandler),
 		larkws.WithLogLevel(logLevel),
 	)
 
+	// 初始化请求客户端
+	reqClient := reqclient.NewClient(config)
+
 	return &Bot{
+		Config:     config,
 		WsClient:   wsClient,
 		HttpClient: httpClient,
+		ReqClient:  reqClient,
 	}
 }
 
@@ -58,43 +68,6 @@ func (b *Bot) Run() {
 	if err != nil {
 		panic(err)
 	}
-}
-
-type HandlerFunc func(ctx context.Context) error
-
-var keyWords2Handler map[string]HandlerFunc = map[string]HandlerFunc{
-	"门禁二维码": handler.SendQrcodeCard,
-	"宿舍电费":  handler.SendRoomBalanceText,
-}
-
-// P2MessageReceive 处理 P2MessageReceive 事件
-func P2MessageReceive(ctx context.Context, event *larkim.P2MessageReceiveV1) error {
-	switch *event.Event.Message.ChatId {
-	case config.Get().Qrcode.ChatId: // 可以接受二维码的群 	// TODO: 优化结构，这里不只有二维码了，还可以查询电费
-		switch *event.Event.Message.MessageType {
-		case "text":
-			var text struct {
-				Text string `json:"text"`
-			}
-			if err := json.Unmarshal([]byte(*event.Event.Message.Content), &text); err != nil {
-				slog.Error("解析消息内容失败", "err", err)
-				return err
-			}
-
-			handler, ok := keyWords2Handler[text.Text]
-			if !ok {
-				return nil
-			}
-
-			slog.Info("收到关键词消息", "关键词", text.Text, "Sender.OpenId", *event.Event.Sender.SenderId.OpenId)
-			ctx = context.WithValue(ctx, consts.KeyMessageID, *event.Event.Message.MessageId)
-			if err := handler(ctx); err != nil {
-				slog.Error("生成二维码卡片消息失败", "err", err)
-				return err
-			}
-		}
-	}
-	return nil
 }
 
 var cardHandler = larkcard.NewCardActionHandler(config.Get().APP.VerificationToken, config.Get().APP.EventEncryptKey, qrcodeCardHandler)

@@ -13,9 +13,13 @@ func main() {
 	slog.SetDefault(slog.New(slogor.NewHandler(os.Stderr, slogor.Options{
 		TimeFormat: "2006-01-02 15:04:05.000",
 		ShowSource: true,
+		Level:      slog.LevelDebug, // TODO: 根据环境设置日志级别
 		NoColor:    env.Active == env.PRO,
 	})))
 
+	// 初始化机器人
 	bot := bot.NewBot()
+
+	// 运行机器人
 	bot.Run()
 }
