@@ -23,6 +23,7 @@ type AppConfig struct {
 type QrcodeConfig struct {
 	OpenId   string `yaml:"openId"`
 	BaseUrl  string `yaml:"baseUrl"`
+	ChatId   string `yaml:"chatId"`
 	ThreadId string `yaml:"threadId"`
 	CardId   string `yaml:"cardId"`
 }
