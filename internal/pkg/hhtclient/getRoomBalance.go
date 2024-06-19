@@ -6,7 +6,7 @@ import (
 )
 
 func GetRoomBalance(ctx context.Context) (float64, error) {
-	var resp GetRoomBalanceResponse
+	var resp getRoomBalanceResponse
 	err := client.Get("/proxy/qy/sdcz/getRoomBalance?apartmentId=7&roomId=2290").
 		Do(ctx).
 		Into(&resp)
@@ -22,7 +22,7 @@ func GetRoomBalance(ctx context.Context) (float64, error) {
 	return resp.Result, nil
 }
 
-type GetRoomBalanceResponse struct {
+type getRoomBalanceResponse struct {
 	Code      int64       `json:"code"`
 	Data      interface{} `json:"data"`
 	Message   string      `json:"message"`
