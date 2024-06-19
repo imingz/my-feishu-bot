@@ -1,8 +1,9 @@
-package qrcodeclient
+package hhtclient
 
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"xiaoxiaojiqiren/internal/pkg/config"
 )
 
@@ -16,7 +17,7 @@ func GetSatoken(ctx context.Context) (satoken string, err error) {
 		return "", err
 	}
 	if !resp.Success {
-		return "", err
+		return "", errors.New(resp.Message)
 	}
 
 	var data satokenData

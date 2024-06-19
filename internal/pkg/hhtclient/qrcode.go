@@ -1,8 +1,9 @@
-package qrcodeclient
+package hhtclient
 
 import (
 	"context"
 	"encoding/json"
+	"errors"
 )
 
 func GetQrcode(ctx context.Context) (qrcode string, err error) {
@@ -20,7 +21,7 @@ func GetQrcode(ctx context.Context) (qrcode string, err error) {
 		return "", err
 	}
 	if !resp.Success {
-		return "", err
+		return "", errors.New(resp.Message)
 	}
 
 	var data makeCodeInfoData

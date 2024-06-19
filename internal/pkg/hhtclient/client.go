@@ -1,4 +1,4 @@
-package qrcodeclient
+package hhtclient
 
 import (
 	"encoding/json"

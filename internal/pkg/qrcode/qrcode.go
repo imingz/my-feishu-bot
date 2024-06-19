@@ -4,13 +4,13 @@ import (
 	"bytes"
 	"context"
 	"io"
-	"xiaoxiaojiqiren/internal/pkg/qrcode/qrcodeclient"
+	"xiaoxiaojiqiren/internal/pkg/hhtclient"
 
 	"github.com/skip2/go-qrcode"
 )
 
 func GetQrcodeFile() (io.Reader, error) {
-	gotQrcode, err := qrcodeclient.GetQrcode(context.Background())
+	gotQrcode, err := hhtclient.GetQrcode(context.Background())
 	if err != nil {
 		return nil, err
 	}
