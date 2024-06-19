@@ -1,4 +1,4 @@
-package biz
+package handler
 
 import (
 	"context"
@@ -10,7 +10,7 @@ import (
 	larkim "github.com/larksuite/oapi-sdk-go/v3/service/im/v1"
 )
 
-func SendRoomBalanceText() error {
+func SendRoomBalanceText(ctx context.Context) error {
 	// 创建请求对象
 	balance, err := hhtclient.GetRoomBalance(context.Background())
 	if err != nil {

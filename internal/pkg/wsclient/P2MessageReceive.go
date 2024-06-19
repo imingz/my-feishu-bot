@@ -2,26 +2,45 @@ package wsclient
 
 import (
 	"context"
+	"encoding/json"
 	"log/slog"
-	"xiaoxiaojiqiren/internal/pkg/biz"
 	"xiaoxiaojiqiren/internal/pkg/config"
+	"xiaoxiaojiqiren/internal/pkg/consts"
+	"xiaoxiaojiqiren/internal/pkg/handler"
 
 	larkim "github.com/larksuite/oapi-sdk-go/v3/service/im/v1"
 )
 
-// 接受到任意消息就回复二维码
+type HandlerFunc func(ctx context.Context) error
+
+var keyWords2Handler map[string]HandlerFunc = map[string]HandlerFunc{
+	"门禁二维码": handler.SendQrcodeCard,
+	"宿舍电费":  handler.SendRoomBalanceText,
+}
+
+// P2MessageReceive 处理 P2MessageReceive 事件
 func P2MessageReceive(ctx context.Context, event *larkim.P2MessageReceiveV1) error {
 	switch *event.Event.Message.ChatId {
-	case config.Get().Qrcode.ChatId: // 可以接受二维码的群
-		if *event.Event.Message.MessageType == "text" {
-			const CorrectText = `{"text":"门禁二维码"}`
-			if *event.Event.Message.Content == CorrectText {
-				slog.Info("收到门禁二维码消息", "Sender.OpenId", *event.Event.Sender.SenderId.OpenId)
-				// 回复消息为话题并发送初始二维码卡片
-				err := biz.SendQrcodeCard(*event.Event.Message.MessageId)
-				if err != nil {
-					slog.Error("生成二维码卡片消息失败", "err", err)
-				}
+	case config.Get().Qrcode.ChatId: // 可以接受二维码的群 	// TODO: 优化结构，这里不只有二维码了，还可以查询电费
+		switch *event.Event.Message.MessageType {
+		case "text":
+			var text struct {
+				Text string `json:"text"`
+			}
+			if err := json.Unmarshal([]byte(*event.Event.Message.Content), &text); err != nil {
+				slog.Error("解析消息内容失败", "err", err)
+				return err
+			}
+
+			handler, ok := keyWords2Handler[text.Text]
+			if !ok {
+				return nil
+			}
+
+			slog.Info("收到关键词消息", "关键词", text.Text, "Sender.OpenId", *event.Event.Sender.SenderId.OpenId)
+			ctx = context.WithValue(ctx, consts.KeyMessageID, *event.Event.Message.MessageId)
+			if err := handler(ctx); err != nil {
+				slog.Error("生成二维码卡片消息失败", "err", err)
 				return err
 			}
 		}

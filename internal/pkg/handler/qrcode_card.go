@@ -1,4 +1,4 @@
-package biz
+package handler
 
 import (
 	"context"
@@ -8,6 +8,7 @@ import (
 	"log/slog"
 	"time"
 	"xiaoxiaojiqiren/internal/pkg/client"
+	"xiaoxiaojiqiren/internal/pkg/consts"
 	"xiaoxiaojiqiren/internal/pkg/qrcode"
 
 	larkcard "github.com/larksuite/oapi-sdk-go/v3/card"
@@ -30,13 +31,15 @@ func GenerateQrcodeCard(messageId string) (*larkcard.MessageCard, error) {
 	return getQrcodeCard(imageKey), nil
 }
 
-func SendQrcodeCard(messageId string) error {
-	// 1. 生成卡片消息
+func SendQrcodeCard(ctx context.Context) error {
+	// 1. 从 ctx 获取 messageId
+	messageId := ctx.Value(consts.KeyMessageID).(string)
+	// 2. 生成卡片消息
 	card, err := GenerateQrcodeCard(messageId)
 	if err != nil {
 		return err
 	}
-	// 2. 发送卡片消息
+	// 3. 发送卡片消息
 	return sendQrcodeCard(messageId, card)
 }
 

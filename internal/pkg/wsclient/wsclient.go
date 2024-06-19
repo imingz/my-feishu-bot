@@ -12,11 +12,10 @@ import (
 
 var client *larkws.Client
 var once sync.Once
-var handler *dispatcher.EventDispatcher
 
 func Get() *larkws.Client {
 	once.Do(func() {
-		handler = dispatcher.NewEventDispatcher("", "").
+		handler := dispatcher.NewEventDispatcher("", "").
 			OnP2MessageReceiveV1(P2MessageReceive)
 		switch env.Active {
 		case env.DEV:
