@@ -8,12 +8,12 @@ build:
 
 .PHONY: run
 run: build
-	./$(OUTPUT_DIR)/$(TARGET) --env=dev
+	$(OUTPUT_DIR)/$(TARGET) --env=dev
 
 .PHONY: realse
 realse: build
 	mkdir -p $(LOG_DIR)
-	nohup ./$(OUTPUT_DIR)/$(TARGET) --env=pro > $(LOG_DIR)/$(TARGET).log 2>&1 &
+	nohup $(OUTPUT_DIR)/$(TARGET) --env=pro > $(LOG_DIR)/$(TARGET).log 2>&1 &
 
 .PHONY: show
 show:

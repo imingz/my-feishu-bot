@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log/slog"
 	"time"
 	"xiaoxiaojiqiren/internal/pkg/client"
 	"xiaoxiaojiqiren/internal/pkg/qrcode"
@@ -17,11 +18,12 @@ func GenerateQrcodeCard(messageId string) (*larkcard.MessageCard, error) {
 	// 1. 获取二维码图片
 	img, err := qrcode.GetQrcodeFile()
 	if err != nil {
-		return nil, errors.Join(err, errors.New("获取二维码图片失败"))
+		return nil, err
 	}
 	// 2. 上传图片
 	imageKey, err := uploadImage(img)
 	if err != nil {
+		slog.Error("上传图片失败", "err", err)
 		return nil, err
 	}
 	// 3. 获取消息卡片
@@ -70,7 +72,7 @@ func uploadImage(image io.Reader) (string, error) {
 func getQrcodeCard(imageKey string) *larkcard.MessageCard {
 	// header
 	header := larkcard.NewMessageCardHeader().
-		Template(larkcard.TemplateWathet).
+		Template(larkcard.TemplateBlue).
 		Title(larkcard.NewMessageCardPlainText().
 			Content(time.Now().Format(time.DateTime)).
 			Build()).

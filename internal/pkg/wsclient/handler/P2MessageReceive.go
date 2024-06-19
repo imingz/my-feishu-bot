@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"log/slog"
 	"xiaoxiaojiqiren/internal/pkg/biz"
 	"xiaoxiaojiqiren/internal/pkg/config"
 
@@ -15,8 +16,13 @@ func P2MessageReceive(ctx context.Context, event *larkim.P2MessageReceiveV1) err
 		if *event.Event.Message.MessageType == "text" {
 			const CorrectText = `{"text":"门禁二维码"}`
 			if *event.Event.Message.Content == CorrectText {
+				slog.Info("收到门禁二维码消息", "Sender.OpenId", *event.Event.Sender.SenderId.OpenId)
 				// 回复消息为话题并发送初始二维码卡片
-				return biz.SendQrcodeCard(*event.Event.Message.MessageId)
+				err := biz.SendQrcodeCard(*event.Event.Message.MessageId)
+				if err != nil {
+					slog.Error("生成二维码卡片消息失败", "err", err)
+				}
+				return err
 			}
 		}
 	}
