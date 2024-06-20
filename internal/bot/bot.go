@@ -6,6 +6,7 @@ import (
 	"xiaoxiaojiqiren/config"
 	"xiaoxiaojiqiren/internal/bot/lark"
 	"xiaoxiaojiqiren/internal/bot/ws"
+	huihutongclient "xiaoxiaojiqiren/internal/pkg/HuiHutong_client"
 )
 
 type Bot struct {
@@ -19,8 +20,11 @@ func NewBot() *Bot {
 	config := config.NewConfig()
 	slog.Debug("初始化配置", "config", config)
 
+	// 初始化慧湖通客户端
+	huihutong := huihutongclient.NewClient()
+
 	// 初始化 Lark 客户端
-	larkClient := lark.NewClient(config.Bot.AppID, config.Bot.AppSecret)
+	larkClient := lark.NewClient(config.Bot.AppID, config.Bot.AppSecret, huihutong)
 
 	// 初始化事件订阅客户端
 	wsClient := ws.NewClient(config.Bot.AppID, config.Bot.AppSecret, larkClient)
