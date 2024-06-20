@@ -12,8 +12,8 @@ import (
 func (c *Client) SendRoomBalanceText(ctx context.Context) error {
 	// 获取接收者 open_id
 	event := ctx.Value(consts.KeyEvent).(*larkim.P2MessageReceiveV1Data)
-	open_id := *event.Sender.SenderId.OpenId
-	if open_id == "" {
+	open_id := event.Sender.SenderId.OpenId
+	if open_id == nil {
 		return fmt.Errorf("open_id 为空")
 	}
 
@@ -37,7 +37,7 @@ func (c *Client) SendRoomBalanceText(ctx context.Context) error {
 	req := larkim.NewCreateMessageReqBuilder().
 		ReceiveIdType(`open_id`).
 		Body(larkim.NewCreateMessageReqBodyBuilder().
-			ReceiveId(open_id). // TODO: 从配置中获取
+			ReceiveId(*open_id).
 			MsgType(`post`).
 			Content(content).
 			Build()).

@@ -18,6 +18,7 @@ var keyWords2Handler = make(map[string]func(ctx context.Context) error)
 
 func NewClient(appID, appSecret string, larkClient *lark.Client) *Client {
 	keyWords2Handler["宿舍电费"] = larkClient.SendRoomBalanceText
+	keyWords2Handler["门禁二维码"] = larkClient.SendQrcodeCard
 
 	wsHandler := dispatcher.NewEventDispatcher("", "").
 		OnP2MessageReceiveV1(p2MessageReceive)
