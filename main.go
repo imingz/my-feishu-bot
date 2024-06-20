@@ -10,10 +10,14 @@ import (
 
 func main() {
 	// 设置 slog
+	var slogLogLevel = slog.LevelInfo
+	if env.Active == env.DEV {
+		slogLogLevel = slog.LevelDebug
+	}
 	slog.SetDefault(slog.New(slogor.NewHandler(os.Stderr, slogor.Options{
 		TimeFormat: "2006-01-02 15:04:05.000",
 		ShowSource: true,
-		Level:      slog.LevelDebug, // TODO: 根据环境设置日志级别
+		Level:      slogLogLevel,
 		NoColor:    env.Active == env.PRO,
 	})))
 
