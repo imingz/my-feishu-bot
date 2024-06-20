@@ -10,9 +10,9 @@ import (
 )
 
 type Bot struct {
-	Config     *config.Config // 配置
-	LarkClient *lark.Client   // Lark 客户端
-	WsClient   *ws.Client     // 事件订阅客户端
+	config     *config.Config // 配置
+	larkClient *lark.Client   // Lark 客户端
+	wsClient   *ws.Client     // 事件订阅客户端
 }
 
 func NewBot() *Bot {
@@ -30,14 +30,14 @@ func NewBot() *Bot {
 	wsClient := ws.NewClient(config.Bot.AppID, config.Bot.AppSecret, larkClient)
 
 	return &Bot{
-		Config:     config,
-		WsClient:   wsClient,
-		LarkClient: larkClient,
+		config:     config,
+		wsClient:   wsClient,
+		larkClient: larkClient,
 	}
 }
 
 func (b *Bot) Run() {
-	err := b.WsClient.Start(context.Background())
+	err := b.wsClient.Start(context.Background())
 	if err != nil {
 		panic(err)
 	}
