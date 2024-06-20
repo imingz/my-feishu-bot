@@ -1,6 +1,7 @@
 package ws
 
 import (
+	"context"
 	"xiaoxiaojiqiren/internal/bot/lark"
 	"xiaoxiaojiqiren/internal/pkg/env"
 
@@ -11,10 +12,13 @@ import (
 
 type Client struct {
 	*larkws.Client
-	LarkClient *lark.Client
 }
 
+var keyWords2Handler = make(map[string]func(ctx context.Context) error)
+
 func NewClient(appID, appSecret string, larkClient *lark.Client) *Client {
+	keyWords2Handler["宿舍电费"] = larkClient.SendRoomBalanceText
+
 	wsHandler := dispatcher.NewEventDispatcher("", "").
 		OnP2MessageReceiveV1(p2MessageReceive)
 
@@ -28,7 +32,6 @@ func NewClient(appID, appSecret string, larkClient *lark.Client) *Client {
 		larkws.WithLogLevel(wsLogLevel),
 	)
 	return &Client{
-		Client:     wsClient,
-		LarkClient: larkClient,
+		Client: wsClient,
 	}
 }

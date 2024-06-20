@@ -11,11 +11,11 @@ import (
 
 func (c *Client) SendRoomBalanceText(ctx context.Context) error {
 	// 获取接收者 open_id
-	open_id := ctx.Value(consts.KeyOpenID).(string)
+	event := ctx.Value(consts.KeyEvent).(*larkim.P2MessageReceiveV1Data)
+	open_id := *event.Sender.SenderId.OpenId
 	if open_id == "" {
 		return fmt.Errorf("open_id 为空")
 	}
-	slog.Debug("open_id", "open_id", open_id)
 
 	// 获取电费余额
 	balance, err := c.huihutong.GetRoomBalance()
