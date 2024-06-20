@@ -4,7 +4,7 @@ OUTPUT_DIR = ./output
 
 .PHONY: build
 build:
-	go build -o ./$(OUTPUT_DIR)/$(TARGET)
+	go build -o $(OUTPUT_DIR)/$(TARGET)
 
 .PHONY: run
 run: build

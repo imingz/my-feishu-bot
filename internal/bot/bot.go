@@ -18,7 +18,7 @@ type Bot struct {
 func NewBot() *Bot {
 	// 初始化配置
 	config := config.NewConfig()
-	slog.Debug("初始化配置", "config", config)
+	slog.Info("初始化配置", "config", config)
 
 	// 初始化慧湖通客户端
 	huihutong := huihutongclient.NewClient()
