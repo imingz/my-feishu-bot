@@ -6,7 +6,6 @@ import (
 	"xiaoxiaojiqiren/internal/pkg/config"
 	"xiaoxiaojiqiren/internal/pkg/env"
 	"xiaoxiaojiqiren/internal/pkg/handler"
-	reqclient "xiaoxiaojiqiren/internal/pkg/req_client"
 
 	"github.com/gin-gonic/gin"
 	sdkginext "github.com/larksuite/oapi-sdk-gin"
@@ -17,10 +16,9 @@ import (
 )
 
 type Bot struct {
-	Config     *config.Config    // 配置
-	WsClient   *larkws.Client    // 事件订阅客户端
-	HttpClient *gin.Engine       // HTTP 服务
-	ReqClient  *reqclient.Client // 慧湖通相关的请求客户端
+	Config     *config.Config // 配置
+	WsClient   *larkws.Client // 事件订阅客户端
+	HttpClient *gin.Engine    // HTTP 服务
 }
 
 func NewBot() *Bot {
@@ -48,14 +46,10 @@ func NewBot() *Bot {
 		larkws.WithLogLevel(logLevel),
 	)
 
-	// 初始化请求客户端
-	reqClient := reqclient.NewClient(config)
-
 	return &Bot{
 		Config:     config,
 		WsClient:   wsClient,
 		HttpClient: httpClient,
-		ReqClient:  reqClient,
 	}
 }
 
