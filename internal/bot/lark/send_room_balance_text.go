@@ -10,11 +10,11 @@ import (
 )
 
 func (c *Client) SendRoomBalanceText(ctx context.Context) error {
-	// 获取接收者 open_id
+	// 获取 messageId
 	event := ctx.Value(consts.KeyEvent).(*larkim.P2MessageReceiveV1Data)
-	open_id := event.Sender.SenderId.OpenId
-	if open_id == nil {
-		return fmt.Errorf("open_id 为空")
+	messageId := event.Message.MessageId
+	if messageId == nil {
+		return fmt.Errorf("message_id 为空")
 	}
 
 	// 获取电费余额
@@ -34,17 +34,18 @@ func (c *Client) SendRoomBalanceText(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
-	req := larkim.NewCreateMessageReqBuilder().
-		ReceiveIdType(`open_id`).
-		Body(larkim.NewCreateMessageReqBodyBuilder().
-			ReceiveId(*open_id).
-			MsgType(`post`).
+
+	req := larkim.NewReplyMessageReqBuilder().
+		MessageId(*messageId).
+		Body(larkim.NewReplyMessageReqBodyBuilder().
 			Content(content).
+			MsgType(`post`).
+			ReplyInThread(true).
 			Build()).
 		Build()
 
 	// 发起请求
-	resp, err := c.client.Im.Message.Create(context.Background(), req)
+	resp, err := c.client.Im.Message.Reply(context.Background(), req)
 
 	// 处理错误
 	if err != nil {

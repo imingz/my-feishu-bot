@@ -27,12 +27,11 @@ func getClient() *Client {
 
 func TestClient_SendRoomBalanceText(t *testing.T) {
 	c := getClient()
-	open_id := "ou_3d3a97494b21e6b6cb60e58ee8e39e00"
+	msg_id := "om_42b9a6ca276032a9673e5f825210773b"
 	c.SendRoomBalanceText(context.WithValue(context.Background(), consts.KeyEvent, &larkim.P2MessageReceiveV1Data{
-		Sender: &larkim.EventSender{
-			SenderId: &larkim.UserId{
-				OpenId: &open_id,
-			},
+		Sender: &larkim.EventSender{},
+		Message: &larkim.EventMessage{
+			MessageId: &msg_id,
 		},
 	}))
 }
