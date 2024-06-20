@@ -9,7 +9,7 @@ import (
 )
 
 type Client struct {
-	*lark.Client
+	client    *lark.Client
 	huihutong *huihutongclient.Client
 }
 
@@ -20,7 +20,7 @@ func NewClient(appID, appSecret string, huihutong *huihutongclient.Client) *Clie
 	}
 
 	return &Client{
-		Client:    lark.NewClient(appID, appSecret, lark.WithLogLevel(logLevel)),
+		client:    lark.NewClient(appID, appSecret, lark.WithLogLevel(logLevel)),
 		huihutong: huihutong,
 	}
 }
