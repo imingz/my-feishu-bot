@@ -13,7 +13,7 @@ run: build
 .PHONY: realse
 realse: build
 	mkdir -p $(LOG_DIR)
-	nohup $(OUTPUT_DIR)/$(TARGET) --env=pro > $(LOG_DIR)/$(TARGET).log 2>&1 &
+	GIN_MODE=release  nohup $(OUTPUT_DIR)/$(TARGET) --env=pro > $(LOG_DIR)/$(TARGET).log 2>&1 &
 
 .PHONY: show
 show:
@@ -27,4 +27,4 @@ process_id = $(shell ps -ef | grep $(TARGET) | awk 'NR==1{print $$2}')
 
 .PHONY: kill
 kill:
-	sudo -S kill ${process_id}
+	-sudo -S kill ${process_id}
