@@ -5,6 +5,7 @@ import (
 	"log/slog"
 	"os"
 	"xiaoxiaojiqiren/config"
+	cron "xiaoxiaojiqiren/internal/bot/cron_client"
 	ginclient "xiaoxiaojiqiren/internal/bot/gin_client"
 	"xiaoxiaojiqiren/internal/bot/lark"
 	"xiaoxiaojiqiren/internal/bot/ws"
@@ -13,9 +14,10 @@ import (
 )
 
 type Bot struct {
+	logger    *slog.Logger      // 日志
 	wsClient  *ws.Client        // 事件订阅客户端
 	ginclient *ginclient.Client // gin 客户端
-	logger    *slog.Logger      // 日志
+	cron      *cron.Client
 }
 
 var defaultLogger = slog.New(slogor.NewHandler(os.Stderr, slogor.Options{
@@ -34,9 +36,10 @@ func NewBot(opts ...Option) *Bot {
 	larkClient := lark.NewClient(config)
 
 	b := &Bot{
+		logger:    defaultLogger,
 		wsClient:  ws.NewClient(config.Bot.AppID, config.Bot.AppSecret, larkClient),
 		ginclient: ginclient.NewClient(config.Bot.VerificationToken, config.Bot.EventEncryptKey, larkClient),
-		logger:    defaultLogger,
+		cron:      cron.New(),
 	}
 
 	for _, opt := range opts {
@@ -51,6 +54,11 @@ func (b *Bot) Run() {
 	// 启动 gin 客户端
 	go func() {
 		b.ginclient.Run()
+	}()
+
+	// 启动 cron 定时任务
+	go func() {
+		b.cron.Start()
 	}()
 
 	// 启动事件订阅客户端

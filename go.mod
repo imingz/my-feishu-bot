@@ -6,6 +6,7 @@ require (
 	github.com/gin-gonic/gin v1.10.0
 	github.com/larksuite/oapi-sdk-gin v1.0.0
 	github.com/larksuite/oapi-sdk-go/v3 v3.2.7
+	github.com/robfig/cron/v3 v3.0.1
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.19.0
 	github.com/wneessen/go-mail v0.4.1

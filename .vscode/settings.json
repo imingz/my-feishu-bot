@@ -25,6 +25,7 @@
         "Pywh",
         "qrcode",
         "reqclient",
+        "robfig",
         "Satoken",
         "sdcz",
         "sdkginext",
