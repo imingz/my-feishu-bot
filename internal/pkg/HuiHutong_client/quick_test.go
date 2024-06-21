@@ -5,6 +5,15 @@ import (
 	"testing"
 )
 
+func TestGetRoomId(t *testing.T) {
+	c := NewClient()
+	res, err := c.getRoomId("6", "5", "59")
+	if err != nil {
+		fmt.Printf("err: %v\n", err)
+	}
+	fmt.Printf("res: %v\n", res)
+}
+
 func TestGetRoomBalance(t *testing.T) {
 	c := NewClient()
 	res, err := c.GetRoomBalance()

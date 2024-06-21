@@ -3,6 +3,7 @@ package huihutongclient
 import (
 	"encoding/json"
 	"fmt"
+	"xiaoxiaojiqiren/internal/pkg/env"
 
 	"github.com/imroc/req/v3"
 )
@@ -40,7 +41,9 @@ func NewClient() *Client {
 			return nil
 		})
 
-	req.DevMode()
+	if env.Active == env.DEV {
+		c = c.EnableDebugLog()
+	}
 
 	return &Client{c}
 }
