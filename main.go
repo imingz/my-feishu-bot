@@ -9,21 +9,18 @@ import (
 )
 
 func main() {
-	// 设置 slog
-	var slogLogLevel = slog.LevelInfo
-	if env.Active == env.DEV {
-		slogLogLevel = slog.LevelDebug
-	}
-	slog.SetDefault(slog.New(slogor.NewHandler(os.Stderr, slogor.Options{
-		TimeFormat: "2006-01-02 15:04:05.000",
-		ShowSource: true,
-		Level:      slogLogLevel,
-		NoColor:    env.Active == env.PRO,
-	})))
-
 	// 初始化机器人
-	bot := bot.NewBot()
+	b := bot.NewBot()
+
+	if env.Active == env.PRO {
+		b = bot.NewBot(bot.WithLogger(slog.New(slogor.NewHandler(os.Stderr, slogor.Options{
+			TimeFormat: "2006-01-02 15:04:05.000000",
+			ShowSource: true,
+			Level:      slog.LevelInfo,
+			NoColor:    true,
+		}))))
+	}
 
 	// 运行机器人
-	bot.Run()
+	b.Run()
 }
