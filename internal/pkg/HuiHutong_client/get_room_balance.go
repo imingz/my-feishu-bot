@@ -33,7 +33,7 @@ func (c *Client) getRoomId(buildingNumber, floorNumber, roomNumber string) (stri
 }
 
 func (c *Client) GetRoomBalance(buildingNumber, floorNumber, roomNumber string) (float64, error) {
-	roomId, err := c.getRoomId(buildingNumber, floorNumber, roomNumber) // TODO: 从多维表格获取
+	roomId, err := c.getRoomId(buildingNumber, floorNumber, roomNumber)
 	if err != nil {
 		return 0, err
 	}

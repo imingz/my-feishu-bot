@@ -61,6 +61,6 @@ func (c *Client) 获取宿舍电费房间信息(ctx context.Context) (*房间信
 	return &房间信息{
 		楼栋号: fmt.Sprintf("%.0f", resp.Data.Items[0].Fields["宿舍楼栋号"].(float64)),
 		楼层:  fmt.Sprintf("%.0f", resp.Data.Items[0].Fields["楼层"].(float64)),
-		房间号: fmt.Sprintf("%.0f", resp.Data.Items[0].Fields["房间号"].(float64)),
+		房间号: fmt.Sprintf("%02.0f", resp.Data.Items[0].Fields["房间号"].(float64)),
 	}, err
 }
