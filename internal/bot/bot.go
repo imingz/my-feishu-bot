@@ -24,7 +24,7 @@ func NewBot() *Bot {
 	huihutong := huihutongclient.NewClient()
 
 	// 初始化 Lark 客户端
-	larkClient := lark.NewClient(config.Bot.AppID, config.Bot.AppSecret, huihutong)
+	larkClient := lark.NewClient(config, huihutong)
 
 	// 初始化事件订阅客户端
 	wsClient := ws.NewClient(config.Bot.AppID, config.Bot.AppSecret, larkClient)

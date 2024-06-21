@@ -6,7 +6,8 @@ import (
 )
 
 type Config struct {
-	Bot BotConfig `yaml:"Bot"`
+	Bot         BotConfig         `yaml:"Bot"`
+	ConfigTable ConfigTableConfig `yaml:"ConfigTable"`
 }
 
 // BotConfig 包含 Bot 的详细配置
@@ -15,6 +16,12 @@ type BotConfig struct {
 	AppSecret         string `yaml:"AppSecret"`
 	VerificationToken string `yaml:"VerificationToken"`
 	EventEncryptKey   string `yaml:"EventEncryptKey"`
+}
+
+// ConfigTableConfig
+type ConfigTableConfig struct {
+	AppToken string `yaml:"AppToken"`
+	TableId  string `yaml:"TableId"`
 }
 
 // 实现 Config 的 String() 方法

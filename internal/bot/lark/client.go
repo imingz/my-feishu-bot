@@ -1,6 +1,7 @@
 package lark
 
 import (
+	"xiaoxiaojiqiren/config"
 	huihutongclient "xiaoxiaojiqiren/internal/pkg/HuiHutong_client"
 	"xiaoxiaojiqiren/internal/pkg/env"
 
@@ -11,16 +12,18 @@ import (
 type Client struct {
 	client    *lark.Client
 	huihutong *huihutongclient.Client
+	config    *config.Config
 }
 
-func NewClient(appID, appSecret string, huihutong *huihutongclient.Client) *Client {
+func NewClient(config *config.Config, huihutong *huihutongclient.Client) *Client {
 	logLevel := larkcore.LogLevelInfo
 	if env.Active == env.DEV {
 		logLevel = larkcore.LogLevelDebug
 	}
 
 	return &Client{
-		client:    lark.NewClient(appID, appSecret, lark.WithLogLevel(logLevel)),
+		client:    lark.NewClient(config.Bot.AppID, config.Bot.AppSecret, lark.WithLogLevel(logLevel)),
 		huihutong: huihutong,
+		config:    config,
 	}
 }

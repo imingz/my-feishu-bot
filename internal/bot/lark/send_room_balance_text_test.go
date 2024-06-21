@@ -2,6 +2,7 @@ package lark
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 	"os"
 	"testing"
@@ -22,7 +23,9 @@ func getClient() *Client {
 
 	config := config.NewConfig()
 
-	return NewClient(config.Bot.AppID, config.Bot.AppSecret, huihutongclient.NewClient())
+	fmt.Printf("config: %+v\n", config)
+
+	return NewClient(config, huihutongclient.NewClient())
 }
 
 func TestClient_SendRoomBalanceText(t *testing.T) {
