@@ -14,7 +14,7 @@ import (
 	"github.com/skip2/go-qrcode"
 )
 
-func (c *Client) SendQrcodeCard(ctx context.Context) error {
+func (c *Client) Send门禁二维码消息卡片(ctx context.Context) error {
 	// 1. 从 ctx 获取 messageId
 	event := ctx.Value(consts.KeyEvent).(*larkim.P2MessageReceiveV1Data)
 	messageId := event.Message.MessageId
@@ -24,7 +24,7 @@ func (c *Client) SendQrcodeCard(ctx context.Context) error {
 	slog.Debug("", "messageId", *messageId)
 
 	// 2. 生成卡片消息
-	card, err := c.GenerateQrcodeCard(*messageId)
+	card, err := c.Generate门禁二维码消息卡片(*messageId)
 	if err != nil {
 		return err
 	}
@@ -32,7 +32,7 @@ func (c *Client) SendQrcodeCard(ctx context.Context) error {
 	return c.sendQrcodeCard(*messageId, card)
 }
 
-func (c *Client) GenerateQrcodeCard(messageId string) (*larkcard.MessageCard, error) {
+func (c *Client) Generate门禁二维码消息卡片(messageId string) (*larkcard.MessageCard, error) {
 	// 1. 获取二维码图片
 	gotQrcode, err := c.huihutong.GetQrcodeData()
 	if err != nil {

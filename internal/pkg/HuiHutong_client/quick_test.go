@@ -16,7 +16,7 @@ func TestGetRoomId(t *testing.T) {
 
 func TestGetRoomBalance(t *testing.T) {
 	c := NewClient()
-	res, err := c.GetRoomBalance("6", "5", "59")
+	res, err := c.Get房间余额("6", "5", "59")
 	if err != nil {
 		fmt.Printf("err: %v\n", err)
 	}

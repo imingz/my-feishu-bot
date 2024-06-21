@@ -13,7 +13,7 @@ func (c *Client) cardHandler() gin.HandlerFunc {
 	cardHandlerFunc := func(ctx context.Context, cardAction *larkcard.CardAction) (any, error) {
 		if cardAction.Action.Value["qrcode"] == "refresh" {
 			slog.Info("收到刷新二维码请求", "cardAction.OpenID", cardAction.OpenID)
-			card, err := c.larkClient.GenerateQrcodeCard(cardAction.OpenMessageID)
+			card, err := c.larkClient.Generate门禁二维码消息卡片(cardAction.OpenMessageID)
 			if err != nil {
 				slog.Error("生成二维码卡片失败", "err", err)
 			}

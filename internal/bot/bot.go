@@ -28,6 +28,7 @@ var defaultLogger = slog.New(slogor.NewHandler(os.Stderr, slogor.Options{
 }))
 
 func NewBot(opts ...Option) *Bot {
+	slog.SetDefault(defaultLogger)
 	// 初始化配置
 	config := config.NewConfig()
 	slog.Info("初始化配置", "config", config)
@@ -39,7 +40,7 @@ func NewBot(opts ...Option) *Bot {
 		logger:    defaultLogger,
 		wsClient:  ws.NewClient(config.Bot.AppID, config.Bot.AppSecret, larkClient),
 		ginclient: ginclient.NewClient(config.Bot.VerificationToken, config.Bot.EventEncryptKey, larkClient),
-		cron:      cron.New(),
+		cron:      cron.New(larkClient),
 	}
 
 	for _, opt := range opts {
@@ -57,9 +58,7 @@ func (b *Bot) Run() {
 	}()
 
 	// 启动 cron 定时任务
-	go func() {
-		b.cron.Start()
-	}()
+	b.cron.Start()
 
 	// 启动事件订阅客户端
 	err := b.wsClient.Start(context.Background())

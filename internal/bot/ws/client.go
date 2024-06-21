@@ -17,8 +17,8 @@ type Client struct {
 var keyWords2Handler = make(map[string]func(ctx context.Context) error)
 
 func NewClient(appID, appSecret string, larkClient *lark.Client) *Client {
-	keyWords2Handler["宿舍电费"] = larkClient.SendRoomBalanceText
-	keyWords2Handler["门禁二维码"] = larkClient.SendQrcodeCard
+	keyWords2Handler["宿舍电费"] = larkClient.Send宿舍电费余额文本
+	keyWords2Handler["门禁二维码"] = larkClient.Send门禁二维码消息卡片
 
 	wsHandler := dispatcher.NewEventDispatcher("", "").
 		OnP2MessageReceiveV1(p2MessageReceive)

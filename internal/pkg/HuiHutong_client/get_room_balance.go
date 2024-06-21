@@ -32,7 +32,7 @@ func (c *Client) getRoomId(buildingNumber, floorNumber, roomNumber string) (stri
 	return trueRoomId, nil
 }
 
-func (c *Client) GetRoomBalance(buildingNumber, floorNumber, roomNumber string) (float64, error) {
+func (c *Client) Get房间余额(buildingNumber, floorNumber, roomNumber string) (float64, error) {
 	roomId, err := c.getRoomId(buildingNumber, floorNumber, roomNumber)
 	if err != nil {
 		return 0, err
