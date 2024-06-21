@@ -7,7 +7,6 @@ import (
 	"os"
 	"testing"
 	"xiaoxiaojiqiren/config"
-	huihutongclient "xiaoxiaojiqiren/internal/pkg/HuiHutong_client"
 	"xiaoxiaojiqiren/internal/pkg/consts"
 	"xiaoxiaojiqiren/internal/pkg/slogor"
 
@@ -25,7 +24,7 @@ func getClient() *Client {
 
 	fmt.Printf("config: %+v\n", config)
 
-	return NewClient(config, huihutongclient.NewClient())
+	return NewClient(config)
 }
 
 func TestClient_SendRoomBalanceText(t *testing.T) {

@@ -15,11 +15,14 @@ type Client struct {
 	config    *config.Config
 }
 
-func NewClient(config *config.Config, huihutong *huihutongclient.Client) *Client {
+func NewClient(config *config.Config) *Client {
 	logLevel := larkcore.LogLevelInfo
 	if env.Active == env.DEV {
 		logLevel = larkcore.LogLevelDebug
 	}
+
+	// 初始化慧湖通客户端
+	huihutong := huihutongclient.NewClient()
 
 	return &Client{
 		client:    lark.NewClient(config.Bot.AppID, config.Bot.AppSecret, lark.WithLogLevel(logLevel)),
