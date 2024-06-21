@@ -32,8 +32,8 @@ func (c *Client) getRoomId(buildingNumber, floorNumber, roomNumber string) (stri
 	return trueRoomId, nil
 }
 
-func (c *Client) GetRoomBalance() (float64, error) {
-	roomId, err := c.getRoomId("6", "5", "59") // TODO: 从多维表格获取
+func (c *Client) GetRoomBalance(buildingNumber, floorNumber, roomNumber string) (float64, error) {
+	roomId, err := c.getRoomId(buildingNumber, floorNumber, roomNumber) // TODO: 从多维表格获取
 	if err != nil {
 		return 0, err
 	}

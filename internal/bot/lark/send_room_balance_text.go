@@ -17,8 +17,14 @@ func (c *Client) SendRoomBalanceText(ctx context.Context) error {
 		return fmt.Errorf("message_id 为空")
 	}
 
+	// 获取房间配置
+	info, err := c.获取宿舍电费房间信息(ctx)
+	if err != nil {
+		return fmt.Errorf("获取房间配置失败: %v", err)
+	}
+
 	// 获取电费余额
-	balance, err := c.huihutong.GetRoomBalance()
+	balance, err := c.huihutong.GetRoomBalance(info.楼栋号, info.楼层, info.房间号)
 	if err != nil {
 		return err
 	}
