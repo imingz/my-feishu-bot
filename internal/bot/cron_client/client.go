@@ -22,7 +22,6 @@ func New(larkClient *lark.Client) *Client {
 	// 维护定时任务
 	var taskMap = map[string]func(){
 		"0 20 * * *": c.检查宿舍电费, // 每天 20 点检查宿舍电费
-		"0 * * * *":  c.检查宿舍电费,
 	}
 
 	// 添加定时任务

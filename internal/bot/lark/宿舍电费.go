@@ -25,7 +25,7 @@ func (c *Client) Send宿舍电费余额文本(ctx context.Context) error {
 	}
 
 	// 获取电费余额
-	balance, err := c.huihutong.Get房间余额(info.楼栋号, info.楼层, info.房间号)
+	balance, err := c.Huihutong.Get房间余额(info.楼栋号, info.楼层, info.房间号)
 	if err != nil {
 		return err
 	}

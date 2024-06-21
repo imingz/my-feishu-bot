@@ -10,9 +10,12 @@ import (
 
 func main() {
 	// 初始化机器人
-	b := bot.NewBot()
+	var b *bot.Bot
 
-	if env.Active == env.PRO {
+	switch env.Active {
+	case env.DEV:
+		b = bot.NewBot()
+	case env.PRO:
 		b = bot.NewBot(bot.WithLogger(slog.New(slogor.NewHandler(os.Stderr, slogor.Options{
 			TimeFormat: "2006-01-02 15:04:05.000000",
 			ShowSource: true,

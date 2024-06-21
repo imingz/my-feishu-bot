@@ -34,7 +34,7 @@ func (c *Client) Send门禁二维码消息卡片(ctx context.Context) error {
 
 func (c *Client) Generate门禁二维码消息卡片(messageId string) (*larkcard.MessageCard, error) {
 	// 1. 获取二维码图片
-	gotQrcode, err := c.huihutong.GetQrcodeData()
+	gotQrcode, err := c.Huihutong.GetQrcodeData()
 	if err != nil {
 		return nil, fmt.Errorf("获取二维码图片失败, err: %v", err)
 	}

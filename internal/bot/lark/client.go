@@ -4,15 +4,17 @@ import (
 	"xiaoxiaojiqiren/config"
 	huihutongclient "xiaoxiaojiqiren/internal/pkg/HuiHutong_client"
 	"xiaoxiaojiqiren/internal/pkg/env"
+	"xiaoxiaojiqiren/internal/pkg/mail"
 
 	lark "github.com/larksuite/oapi-sdk-go/v3"
 	larkcore "github.com/larksuite/oapi-sdk-go/v3/core"
 )
 
 type Client struct {
-	client    *lark.Client
-	huihutong *huihutongclient.Client
 	config    *config.Config
+	client    *lark.Client
+	Huihutong *huihutongclient.Client
+	Mail      *mail.Client
 }
 
 func NewClient(config *config.Config) *Client {
@@ -26,7 +28,8 @@ func NewClient(config *config.Config) *Client {
 
 	return &Client{
 		client:    lark.NewClient(config.Bot.AppID, config.Bot.AppSecret, lark.WithLogLevel(logLevel)),
-		huihutong: huihutong,
+		Huihutong: huihutong,
 		config:    config,
+		Mail:      mail.New(&config.Mail),
 	}
 }

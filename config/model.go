@@ -23,6 +23,7 @@ type BotConfig struct {
 type ConfigTableConfig struct {
 	AppToken string `yaml:"AppToken"`
 	TableId  string `yaml:"TableId"`
+	ViewId   string `yaml:"ViewId"`
 }
 
 // MailConfig
