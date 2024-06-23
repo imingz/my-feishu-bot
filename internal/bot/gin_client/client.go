@@ -26,6 +26,7 @@ func NewClient(verificationToken, eventEncryptKey string, larkClient *lark.Clien
 	webhook := g.Group("/webhook")
 	{
 		webhook.POST("/lark", c.cardHandler())
+		webhook.POST("/17track", c.webhook17trackHandler)
 	}
 
 	return c
